@@ -25,8 +25,9 @@ class AddProduct extends Component {
             stores: [],
             productName: '',
             description: '',
-            company: '',
-            storeName:''
+            qty: 0,
+            unitPrice: 0,
+            storeName: ''
 
         }
         this.submit = this.submit.bind(this);
@@ -48,12 +49,13 @@ class AddProduct extends Component {
             storeName: this.state.storeName,
           //    productName: this.refs.productName,
             description: this.state.description,
-            company: this.state.company,
+            qty: this.state.qty,
+            unitPrice: this.state.unitPrice
         }
         console.log(productDetails)
-        //  DBfirebase.refAddProduct.push(productDetails);
-        //  browserHistory.push('/home/view-purchases')
-
+          DBfirebase.ref.child('/AddedPurchases').push(productDetails);
+          browserHistory.push('/home/view-purchases')
+          
     }
 
     GetAllProducts(e) {
@@ -88,8 +90,8 @@ class AddProduct extends Component {
         let refStores = firebase.database().ref().child('/AddedStores/');
         _self.stores = [];
 
-        //  console.log(this.refs.selectedCity.value)
-        //  ref.orderByChild('city').equalTo(this.refs.selectedCity.value).once('value', function (snapshot) {
+       //   console.log(this.refs.selectedCity.value)
+      //    ref.orderByChild('city').equalTo(this.refs.selectedCity.value).once('value', function (snapshot) {
         refStores.once('value', function (snapshot) {
 
 
@@ -141,7 +143,7 @@ class AddProductForm extends React.Component {
 
 
     render() {
-        console.log("this.props.signUpState.products", this.props.signUpState.products)
+      //  console.log("this.props.signUpState.products", this.props.signUpState.products)
         const datasource = []
 
         {
@@ -163,14 +165,17 @@ class AddProductForm extends React.Component {
 
                     <select style={style}
                         required
+                        autofocus
                         name="productName"
                         ref="productName"
                         onChange={this.props._inputHandler}
                         value={this.props.signUpState.productName}
                     >
+                    <option value="Select Product" > Select Product  </option>
                         {
                             this.props.signUpState.products.map((v, i) => {
                                 return (
+                                    
                                     <option value={v.productName} key={i}> {v.productName} </option>
                                 )
                             })}
@@ -181,11 +186,14 @@ class AddProductForm extends React.Component {
 
  <select style={style}
                         required
-                        name="productName"
-                        ref="productName"
+                        
+                        name="storeName"
+                        ref="storeName"
+                        defaultValue="Select Store"
                         onChange={this.props._inputHandler}
-                        value={this.props.signUpState.productName}
+                        value={this.props.signUpState.storeName}
                     >
+                    <option value="Select Store" > Select Store  </option>
                         {
                             this.props.signUpState.stores.map((s, i) => {
                                 return (
@@ -217,7 +225,29 @@ class AddProductForm extends React.Component {
                     />
                     <br /><br />*/}
 
+                  
+
                     <TextField
+                        type="number"
+                        hintText="qty"
+                        name="qty"
+                        value={this.props.signUpState.qty}
+                        floatingLabelText="qty"
+                        onChange={this.props._inputHandler}
+                    /><br />
+                    <br />
+
+                        <TextField
+                        type="number"
+                        hintText="unitPrice"
+                        name="unitPrice"
+                        value={this.props.signUpState.unitPrice}
+                        floatingLabelText="unitPrice"
+                        onChange={this.props._inputHandler}
+                    /><br />
+                    <br />
+
+                      <TextField
                         type="text"
                         hintText="description"
                         name="description"
@@ -225,16 +255,6 @@ class AddProductForm extends React.Component {
                         floatingLabelText="description"
                         onChange={this.props._inputHandler}
                     /><br /><br />
-
-                    <TextField
-                        type="text"
-                        hintText="company"
-                        name="company"
-                        value={this.props.signUpState.company}
-                        floatingLabelText="company"
-                        onChange={this.props._inputHandler}
-                    /><br />
-                    <br />
 
                     <RaisedButton type="submit" label="Add Product" primary={false} secondary={true} /> <br /><br />
                 </form>
