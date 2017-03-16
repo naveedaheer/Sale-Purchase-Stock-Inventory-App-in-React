@@ -54,9 +54,16 @@ export default class Dashboard extends React.Component {
          openSecondary={false} open={this.state.openDrawer} style={styles.drawer} >
               
               <AppBar title="Dashboard" style={styles.appBar}
-        iconClassNameRight="muidocs-icon-navigation-expand-more"
+       // iconClassNameRight="muidocs-icon-navigation-expand-more"
          onTouchTap={this.handleToggle} >   </ AppBar>
            <br /><br />
+
+{/*<img src="http://www.wendia.com/wp-content/uploads/2015/07/purchase-guy.png" alt="inventory" width="200" />
+<br /><br />*/}
+
+<img src="https://lh3.googleusercontent.com/-TVaFJmmKdA4/VxvHPpFm6EI/AAAAAAAAAHo/csiGYilpa0k5vLs6YkhB5LmHo9_k_3vZACL0B/w692-h389-n-no/naveedaheer1.jpg" alt="inventory" width="260" />
+<br /><br />
+
            <RaisedButton
         fullWidth
           style={styles.button}

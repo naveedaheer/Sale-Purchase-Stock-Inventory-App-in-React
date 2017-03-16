@@ -11,7 +11,7 @@ import AddPurchase from './Components/AddRecords/AddPurchase'
 import AddSale from './Components/AddRecords/AddSale'
 import AddStore from './Components/AddRecords/AddStore'
 import ViewStores from './Components/Reports/ViewStores'
-import ViewPurchases from './Components/Reports/ViewPurchases'
+import ViewPurchases from './Components/Reports/ViewPurchases.js'
 import ViewSales from './Components/Reports/ViewSales'
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
