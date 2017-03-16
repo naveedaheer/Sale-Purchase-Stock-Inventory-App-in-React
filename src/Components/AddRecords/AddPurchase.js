@@ -12,10 +12,10 @@ import AutoComplete from 'material-ui/AutoComplete';
 import * as firebase from 'firebase';
 import { Search } from '../../Store/Actions/Auth'
 
- const style = {
-            padding: '10px',
-            textAlign: 'center'
-        };
+const style = {
+    padding: '10px',
+    textAlign: 'center'
+};
 
 class AddProduct extends Component {
     constructor() {
@@ -25,13 +25,15 @@ class AddProduct extends Component {
             stores: [],
             productName: '',
             description: '',
-            company:'',
-           
+            company: '',
+            storeName:''
+
         }
         this.submit = this.submit.bind(this);
         this.inputHandler = this.inputHandler.bind(this);
-        this.onSearch = this.onSearch.bind(this);
-      //  this.handleUpdateInput = this.handleUpdateInput.bind(this);
+        this.GetAllProducts = this.GetAllProducts.bind(this);
+         this.GetAllStores = this.GetAllStores.bind(this);
+        //  this.handleUpdateInput = this.handleUpdateInput.bind(this);
     }
     inputHandler(e) {
         this.setState({
@@ -43,54 +45,81 @@ class AddProduct extends Component {
         let multipath = {};
         let productDetails = {
             productName: this.state.productName,
-           //  productName: this.refs.productName.value,
+            storeName: this.state.storeName,
+          //    productName: this.refs.productName,
             description: this.state.description,
-           company: this.state.company,
+            company: this.state.company,
         }
         console.log(productDetails)
-      //  DBfirebase.refAddProduct.push(productDetails);
-      //  browserHistory.push('/home/view-purchases')
+        //  DBfirebase.refAddProduct.push(productDetails);
+        //  browserHistory.push('/home/view-purchases')
 
     }
 
-//working code
-     onSearch(e) {
+    GetAllProducts(e) {
         let _self = this;
-       // e.preventDefault()
-        let ref = firebase.database().ref().child('/AddedProducts/');
+        // e.preventDefault()
+        let refProducts = firebase.database().ref().child('/AddedProducts/');
         _self.products = [];
-       
-      //  console.log(this.refs.selectedCity.value)
+
+        //  console.log(this.refs.selectedCity.value)
         //  ref.orderByChild('city').equalTo(this.refs.selectedCity.value).once('value', function (snapshot) {
-  ref.once('value', function (snapshot) {
-                
-                        
+        refProducts.once('value', function (snapshot) {
+
+
 
             snapshot.forEach(childSnapshot => {
 
                 _self.products.push(childSnapshot.val())
                 console.log("products", _self.products)
-                
+
             })
             _self.props.serachProducts(_self.products)
             _self.setState({
                 products: _self.props.storeReducer.products
-                
+
             })
         });
-  }
+    }
 
-   componentWillMount(){
-       this.onSearch();
+        GetAllStores(e) {
+        let _self = this;
+        // e.preventDefault()
+        let refStores = firebase.database().ref().child('/AddedStores/');
+        _self.stores = [];
+
+        //  console.log(this.refs.selectedCity.value)
+        //  ref.orderByChild('city').equalTo(this.refs.selectedCity.value).once('value', function (snapshot) {
+        refStores.once('value', function (snapshot) {
+
+
+
+            snapshot.forEach(childSnapshot => {
+
+                _self.stores.push(childSnapshot.val())
+                console.log("Stores", _self.stores)
+
+            })
+            _self.props.serachProducts(_self.stores)
+            _self.setState({
+                stores: _self.props.storeReducer.products
+
+            })
+        });
+    }
+
+    componentWillMount() {
+        this.GetAllProducts();
+        this.GetAllStores();
     }
 
     handleUpdateInput = (e) => {
-    this.setState({
-     
-      [e.target.name]: e.target.value
-      
-    });
-  };
+        this.setState({
+
+            [e.target.name]: e.target.value
+
+        });
+    };
 
 
     render() {
@@ -112,81 +141,104 @@ class AddProductForm extends React.Component {
 
 
     render() {
-        console.log("this.props.signUpState.products",this.props.signUpState.products)
+        console.log("this.props.signUpState.products", this.props.signUpState.products)
         const datasource = []
 
-         { this.props.signUpState.products.map((v, i) => {
-                                        return (
-                                          datasource.push(v.productName)
-                                        )
-                                    })}
+        {
+            this.props.signUpState.products.map((v, i) => {
+                return (
+                    datasource.push(v.productName)
+                )
+            })
+        }
 
-                                    console.log("datasource", datasource)
+        console.log("datasource", datasource)
 
         return (
             <div >
-              
+
                 <h1>Add Purchased Order</h1>
                 <form onSubmit={this.props._submit} >
 
 
-       {/*<select style={style}
-                                required
-                                ref="store">
-                                {
-                                    this.props.signUpState.products.map((v, i) => {
-                                        return (
-                                            <option value={v.productName} key={i}> {v.productName} </option>
-                                        )
-                                    })}                            
-                                    </select>*/}
-                            <br />
-                            <br />
+                    <select style={style}
+                        required
+                        name="productName"
+                        ref="productName"
+                        onChange={this.props._inputHandler}
+                        value={this.props.signUpState.productName}
+                    >
+                        {
+                            this.props.signUpState.products.map((v, i) => {
+                                return (
+                                    <option value={v.productName} key={i}> {v.productName} </option>
+                                )
+                            })}
+                    </select>
+                    <br />
+                    <br />
+                      <br />
+
+ <select style={style}
+                        required
+                        name="productName"
+                        ref="productName"
+                        onChange={this.props._inputHandler}
+                        value={this.props.signUpState.productName}
+                    >
+                        {
+                            this.props.signUpState.stores.map((s, i) => {
+                                return (
+                                    <option value={s.storeName} key={i}> {s.storeName} </option>
+                                )
+                            })}
+                    </select>
+                    <br />
+                    <br />
 
 
+                    {/*<AutoComplete
+                        hintText="Product Name"
+                        // filter={AutoComplete.noFilter}
+                        // filter={AutoComplete.fuzzyFilter}
+                        filter={AutoComplete.caseInsensitiveFilter}
+                        openOnFocus={true}
+                        name="productName"
+                        ref="productName"
+                        value={this.props.signUpState.productName}
+                        dataSource={datasource}
+                        floatingLabelText="Product Name"
+                        hintText="Product Name"
+                        onChange={this.props._inputHandler}
+                    // onUpdateInput={this.props.handleUpdateInput}
+                    //  onUpdateInput={this.props._inputHandler}
+                    //   dataSourceConfig={dataSourceConfig}
 
-                    <AutoComplete
-          hintText="Product Name"
-         // filter={AutoComplete.noFilter}
-         // filter={AutoComplete.fuzzyFilter}
-          filter={AutoComplete.caseInsensitiveFilter}
-          openOnFocus={true}
-           name="productName"
-           ref="productName"
-            value={this.props.signUpState.productName}
-            dataSource={datasource}
-             floatingLabelText="Product Name"
-             hintText="Product Name"
-          //   onChange={this.props._inputHandler}
-          onUpdateInput={this.props.handleUpdateInput}
-     //  onUpdateInput={this.props._inputHandler}
-       //   dataSourceConfig={dataSourceConfig}
-     
-        />
-                    <br /><br />
+                    />
+                    <br /><br />*/}
 
                     <TextField
                         type="text"
                         hintText="description"
                         name="description"
                         value={this.props.signUpState.description}
-                       floatingLabelText="description"
+                        floatingLabelText="description"
                         onChange={this.props._inputHandler}
-                        /><br /><br />
+                    /><br /><br />
 
-                        <TextField
+                    <TextField
                         type="text"
                         hintText="company"
                         name="company"
                         value={this.props.signUpState.company}
                         floatingLabelText="company"
                         onChange={this.props._inputHandler}
-                        /><br />
-                        <br />
+                    /><br />
+                    <br />
 
-                 <RaisedButton type="submit" label="Add Product" primary={false} secondary={true} /> <br /><br />
+                    <RaisedButton type="submit" label="Add Product" primary={false} secondary={true} /> <br /><br />
                 </form>
-                
+
             </div>
         )
     }
@@ -198,14 +250,14 @@ AddProductForm.PropTypes = {
 
 }
 
-const mapStateToProps = (state) => { 
-     console.log(state.ProductReducer)
+const mapStateToProps = (state) => {
+    console.log(state.ProductReducer)
     return {
         storeReducer: state.ProductReducer
     }
 }
 const mapDispatchToProps = (dispatch) => {
-        return {
+    return {
         serachProducts: (data) => {
             console.log(data)
             dispatch(Search(data))
