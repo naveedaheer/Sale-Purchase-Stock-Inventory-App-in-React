@@ -17,7 +17,7 @@ const style = {
     textAlign: 'center'
 };
 
-class AddProduct extends Component {
+class AddPurchaseOrder extends Component {
     constructor() {
         super();
         this.state = {
@@ -55,7 +55,7 @@ class AddProduct extends Component {
         console.log(productDetails)
           DBfirebase.ref.child('/AddedPurchases').push(productDetails);
           browserHistory.push('/home/view-purchases')
-          
+
     }
 
     GetAllProducts(e) {
@@ -134,7 +134,7 @@ class AddProduct extends Component {
     }
 }
 
-// AddProduct.contextTypes = {
+// AddPurchaseOrder.contextTypes = {
 //     router: React.PropTypes.object.isRequired
 // }
 
@@ -165,7 +165,7 @@ class AddProductForm extends React.Component {
 
                     <select style={style}
                         required
-                        autofocus
+                        
                         name="productName"
                         ref="productName"
                         onChange={this.props._inputHandler}
@@ -285,4 +285,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddProduct);
+export default connect(mapStateToProps, mapDispatchToProps)(AddPurchaseOrder);
