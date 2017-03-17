@@ -24,7 +24,7 @@ import {Link} from 'react-router'
   },
 
   button:{
-   // width:260
+    width:125
   }
  }
 
@@ -56,61 +56,139 @@ export default class Dashboard extends React.Component {
               <AppBar title="Dashboard" style={styles.appBar}
        // iconClassNameRight="muidocs-icon-navigation-expand-more"
          onTouchTap={this.handleToggle} >   </ AppBar>
-           <br /><br />
+           
 
-{/*<img src="http://www.wendia.com/wp-content/uploads/2015/07/purchase-guy.png" alt="inventory" width="200" />
-<br /><br />*/}
+<img src="naveedaheer1.jpg" alt="Naveed Aheer" width="260" />
 
-<img src="https://lh3.googleusercontent.com/-TVaFJmmKdA4/VxvHPpFm6EI/AAAAAAAAAHo/csiGYilpa0k5vLs6YkhB5LmHo9_k_3vZACL0B/w692-h389-n-no/naveedaheer1.jpg" alt="inventory" width="260" />
-<br /><br />
 
            <RaisedButton
         fullWidth
           style={styles.button}
           onTouchTap={this.handleTouchTap}
           label="Sale"
+          primary={false}
+          secondary={true}
+        />
+        <Link to='/home/add-sale' ><RaisedButton
+        
+          style={styles.button}
+          onTouchTap={this.handleTouchTap}
+          label="Add "
           primary={true}
-        /><br /><br /><br />
+        /></Link> 
+        {"  "}
+        <Link to='/home/view-sales' >
+        <RaisedButton
+        
+          style={styles.button}
+          onTouchTap={this.handleTouchTap}
+          label="View "
+          primary={true}
+        /></Link><br /><br />
 
-          <Link to='/home/add-purchase' > <RaisedButton
+          <Link to='/home/view-purchases' > <RaisedButton
         fullWidth
           style={styles.button}
           onTouchTap={this.handleTouchTap}
           label="purchase"
+          secondary={true}
+        /> </Link>
+        <Link to='/home/add-purchase' ><RaisedButton
+        width={150}
+          style={styles.button}
+          onTouchTap={this.handleTouchTap}
+          label="Add "
           primary={true}
-        /> </Link> <br /><br /><br />
+        /></Link> 
+        {"  "}
+        <Link to='/home/view-purchases' >
+        <RaisedButton
+        
+          style={styles.button}
+          onTouchTap={this.handleTouchTap}
+          label="View "
+          primary={true}
+        /></Link><br /><br />
 
  <RaisedButton
         fullWidth
           style={styles.button}
           onTouchTap={this.handleTouchTap}
           label="stock"
-          primary={true}
-        /><br /><br /><br />
-
-<Link to='/home/add-product' ><RaisedButton
+          secondary={true}
+        /><br /><br />
+       <Link to='/home/view-products' ><RaisedButton
         fullWidth
           style={styles.button}
           onTouchTap={this.handleTouchTap}
-          label="Products"
+          label="products"
+          secondary={true}
+        /></Link> 
+
+       <Link to='/home/add-product' ><RaisedButton
+        width={150}
+          style={styles.button}
+          onTouchTap={this.handleTouchTap}
+          label="Add "
           primary={true}
-        /></Link><br /><br /><br />
+        /></Link> 
+        {"  "}
+        <Link to='/home/view-products' >
+        <RaisedButton
+        
+          style={styles.button}
+          onTouchTap={this.handleTouchTap}
+          label="View "
+          primary={true}
+        /></Link><br /><br />
 
 <RaisedButton
         fullWidth
           style={styles.button}
           onTouchTap={this.handleTouchTap}
           label="Stores"
+          secondary={true}
+        />
+        <Link to='/home/add-store' ><RaisedButton
+        width={150}
+          style={styles.button}
+          onTouchTap={this.handleTouchTap}
+          label="Add "
           primary={true}
-        /><br /><br /><br />
-
+        /></Link> 
+        {"  "}
+        <Link to='/home/view-stores' >
+        <RaisedButton
+        
+          style={styles.button}
+          onTouchTap={this.handleTouchTap}
+          label="View "
+          primary={true}
+        /></Link><br /><br />
+{/*
         <RaisedButton
         fullWidth
           style={styles.button}
           onTouchTap={this.handleTouchTap}
           label="Users"
+          secondary={true}
+        />
+        <Link to='/home/add-users' ><RaisedButton
+        width={150}
+          style={styles.button}
+          onTouchTap={this.handleTouchTap}
+          label="Add "
           primary={true}
-        /><br /><br /><br />
+        /></Link> 
+        {"  "}
+        <Link to='/home/view-users' >
+        <RaisedButton
+        
+          style={styles.button}
+          onTouchTap={this.handleTouchTap}
+          label="View "
+          primary={true}
+        /></Link><br /><br />*/}
 
 
         </Drawer>
