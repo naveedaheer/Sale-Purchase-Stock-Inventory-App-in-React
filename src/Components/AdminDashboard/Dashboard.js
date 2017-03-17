@@ -55,11 +55,13 @@ export default class Dashboard extends React.Component {
               
               <AppBar title="Dashboard" style={styles.appBar}
        // iconClassNameRight="muidocs-icon-navigation-expand-more"
-         onTouchTap={this.handleToggle} >   </ AppBar>
+        // onTouchTap={this.handleToggle}
+          >  
+          </ AppBar>
            
-
-<img src="naveedaheer1.jpg" alt="Naveed Aheer" width="260" />
-
+<br />
+<img src='../naveedaheer1.jpg' alt="Naveed Aheer" width="260" ></img>
+<br /> <br />
 
            <RaisedButton
         fullWidth
