@@ -23,6 +23,7 @@ class AddPurchaseOrder extends Component {
         this.state = {
             products: [],
             stores: [],
+            stockAvailable: [],
             productName: '',
             description: '',
             qty: 0,
@@ -34,6 +35,7 @@ class AddPurchaseOrder extends Component {
         this.inputHandler = this.inputHandler.bind(this);
         this.GetAllProducts = this.GetAllProducts.bind(this);
          this.GetAllStores = this.GetAllStores.bind(this);
+         this.GetAllStock = this.GetAllStock.bind(this);
         //  this.handleUpdateInput = this.handleUpdateInput.bind(this);
     }
     inputHandler(e) {
@@ -41,19 +43,37 @@ class AddPurchaseOrder extends Component {
             [e.target.name]: e.target.value
         })
     }
+
+
     submit(e) {
         e.preventDefault();
         let multipath = {};
         let productDetails = {
             productName: this.state.productName,
-            storeName: this.state.storeName,
+          //  storeName: this.state.storeName,
           //    productName: this.refs.productName,
             description: this.state.description,
             qty: this.state.qty,
             unitPrice: this.state.unitPrice
         }
-        console.log(productDetails)
-          DBfirebase.ref.child('/AddedPurchases').push(productDetails);
+
+        let Stock = {
+            productName: this.state.productName,
+            qty: this.state.qty
+        }
+        console.log("before push", productDetails)
+        //  DBfirebase.ref.child('/AddedPurchases').push(productDetails);
+                      console.log("this.state.stockAvailable.productName", this.state.stockAvailable)
+          
+          
+ if (this.state.productName == this.state.stockAvailable.productName){
+     DBfirebase.ref.child('/Stock/${stockAvailable.id}').update(Stock.qty);
+ }
+ else{
+  //   DBfirebase.ref.child('/Stock').push(Stock);
+ }
+
+          
           browserHistory.push('/home/view-purchases')
 
     }
@@ -110,9 +130,37 @@ class AddPurchaseOrder extends Component {
         });
     }
 
+            GetAllStock(e) {
+        let _self = this;
+        // e.preventDefault()
+        let refStock = firebase.database().ref().child('/Stock/');
+        _self.stockAvailable = [];
+
+       //   console.log(this.refs.selectedCity.value)
+      //    ref.orderByChild('city').equalTo(this.refs.selectedCity.value).once('value', function (snapshot) {
+        refStock.once('value', function (snapshot) {
+
+
+
+            snapshot.forEach(childSnapshot => {
+
+                _self.stockAvailable.push(childSnapshot.val())
+                console.log("Stock", _self.stockAvailable)
+
+            })
+            _self.props.serachProducts(_self.stockAvailable)
+            _self.setState({
+                stockAvailable: _self.props.storeReducer.products
+
+            })
+        });
+                    console.log("this.state.stockAvailable.productName", this.state.stockAvailable.productName)
+    }
+
     componentWillMount() {
         this.GetAllProducts();
         this.GetAllStores();
+        this.GetAllStock();
     }
 
     handleUpdateInput = (e) => {
@@ -183,7 +231,7 @@ class AddProductForm extends React.Component {
                     <br />
                     <br />
                       <br />
-
+{/*
  <select style={style}
                         required
                         
@@ -202,7 +250,7 @@ class AddProductForm extends React.Component {
                             })}
                     </select>
                     <br />
-                    <br />
+                    <br />*/}
 
 
                     {/*<AutoComplete

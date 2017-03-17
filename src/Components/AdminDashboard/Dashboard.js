@@ -54,6 +54,7 @@ export default class Dashboard extends React.Component {
          openSecondary={false} open={this.state.openDrawer} style={styles.drawer} >
               
               <AppBar title="Dashboard" style={styles.appBar}
+              showMenuIconButton={false}
        // iconClassNameRight="muidocs-icon-navigation-expand-more"
         // onTouchTap={this.handleToggle}
           >  
@@ -62,7 +63,7 @@ export default class Dashboard extends React.Component {
 <br />
 <img src='../naveedaheer1.jpg' alt="Naveed Aheer" width="260" ></img>
 <br /> <br />
-
+<Link to='/home/add-sale' >
            <RaisedButton
         fullWidth
           style={styles.button}
@@ -70,7 +71,7 @@ export default class Dashboard extends React.Component {
           label="Sale"
           primary={false}
           secondary={true}
-        />
+        /></Link> 
         <Link to='/home/add-sale' ><RaisedButton
         
           style={styles.button}
@@ -143,14 +144,14 @@ export default class Dashboard extends React.Component {
           label="View "
           primary={true}
         /></Link><br /><br />
-
+ <Link to='/home/add-store' >
 <RaisedButton
         fullWidth
           style={styles.button}
           onTouchTap={this.handleTouchTap}
           label="Stores"
           secondary={true}
-        />
+        /></Link>
         <Link to='/home/add-store' ><RaisedButton
         width={150}
           style={styles.button}
