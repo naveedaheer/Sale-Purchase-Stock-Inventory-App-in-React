@@ -72,7 +72,7 @@ class ViewProducts extends Component {
 
 
                 <center>
-                     <h1>Products Added</h1>
+                     <h1>Products List</h1>
                     <br /><br />
 {/*
 
