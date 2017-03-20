@@ -17,18 +17,23 @@ const style = {
     textAlign: 'center'
 };
 
+const pro='';
+
 class AddPurchaseOrder extends Component {
     constructor() {
         super();
         this.state = {
             products: [],
             stores: [],
+            currentProduct: [],
             stockAvailable: [],
             productName: '',
             description: '',
             qty: 0,
             unitPrice: 0,
-            storeName: ''
+            storeName: '',
+            selectedProduct: '',
+            productNameInStock: ''
 
         }
         this.submit = this.submit.bind(this);
@@ -42,10 +47,13 @@ class AddPurchaseOrder extends Component {
         this.setState({
             [e.target.name]: e.target.value
         })
+
+         
     }
 
 
     submit(e) {
+         
         e.preventDefault();
         let multipath = {};
         let productDetails = {
@@ -61,22 +69,58 @@ class AddPurchaseOrder extends Component {
             productName: this.state.productName,
             qty: this.state.qty
         }
+
+//Stock Start
+      let _self = this;
+        // e.preventDefault()
+        let refStock = firebase.database().ref().child('/Stock');
+        _self.currentProduct = [];
+
+     //     console.log("this.state.selectedProduct", this.state.productName)
+          refStock.orderByChild('productName').equalTo(this.state.productName).once('value', function (snapshot) {
+      //  refStock.once('value', function (snapshot) {
+
+
+
+            snapshot.forEach(childSnapshot => {
+
+                _self.currentProduct.push(childSnapshot.val())
+                console.log("Current Pro", _self.currentProduct)
+
+            })
+            _self.props.serachProducts(_self.currentProduct)
+            _self.setState({
+                currentProduct: _self.props.storeReducer.products,
+             
+            })
+            
+        });
+        console.log("this.state.currentProduct" ,this.state.currentProduct)
+     //              console.log("this.state.stockAvailable.productName", this.state.stockAvailable.productName)
+
+// Stock End
         console.log("before push", productDetails)
         //  DBfirebase.ref.child('/AddedPurchases').push(productDetails);
-                      console.log("this.state.stockAvailable.productName", this.state.stockAvailable)
+                   console.log("this.state.currentProduct", this.state.currentProduct.productName)
           
-          
- if (this.state.productName == this.state.stockAvailable.productName){
-     DBfirebase.ref.child('/Stock/${stockAvailable.id}').update(Stock.qty);
- }
- else{
-  //   DBfirebase.ref.child('/Stock').push(Stock);
- }
+          if(this.state.productName == this.state.currentProduct.productName){
+               //    DBfirebase.ref.child('/Stock/${currentProduct.id}').update();
+          }
+
+
+    else{
+                  DBfirebase.ref.child('/Stock').push(Stock);
+        }
+
+  
+ 
 
           
-          browserHistory.push('/home/view-purchases')
+    //      browserHistory.push('/home/view-purchases')
+    
 
     }
+
 
     GetAllProducts(e) {
         let _self = this;
@@ -102,6 +146,7 @@ class AddPurchaseOrder extends Component {
 
             })
         });
+        console.log("this.state.products" ,this.state.products)
     }
 
         GetAllStores(e) {
@@ -133,49 +178,54 @@ class AddPurchaseOrder extends Component {
             GetAllStock(e) {
         let _self = this;
         // e.preventDefault()
-        let refStock = firebase.database().ref().child('/Stock/');
-        _self.stockAvailable = [];
+        let refStock = firebase.database().ref().child('/Stock');
+        _self.currentProduct = [];
 
-       //   console.log(this.refs.selectedCity.value)
-      //    ref.orderByChild('city').equalTo(this.refs.selectedCity.value).once('value', function (snapshot) {
-        refStock.once('value', function (snapshot) {
+     //     console.log("this.state.selectedProduct", this.state.productName)
+          refStock.orderByChild('productName').equalTo(this.state.productName).once('value', function (snapshot) {
+      //  refStock.once('value', function (snapshot) {
 
 
 
             snapshot.forEach(childSnapshot => {
 
-                _self.stockAvailable.push(childSnapshot.val())
-                console.log("Stock", _self.stockAvailable)
+                _self.currentProduct.push(childSnapshot.val())
+                console.log("Current Pro", _self.currentProduct)
 
             })
-            _self.props.serachProducts(_self.stockAvailable)
+            _self.props.serachProducts(_self.currentProduct)
             _self.setState({
-                stockAvailable: _self.props.storeReducer.products
-
+                currentProduct: _self.props.storeReducer.products,
+             
             })
+            
         });
-                    console.log("this.state.stockAvailable.productName", this.state.stockAvailable.productName)
+        console.log("this.state.currentProduct" ,this.state.currentProduct)
+     //              console.log("this.state.stockAvailable.productName", this.state.stockAvailable.productName)
+
     }
 
     componentWillMount() {
         this.GetAllProducts();
         this.GetAllStores();
-        this.GetAllStock();
+        
+        
     }
 
-    handleUpdateInput = (e) => {
-        this.setState({
+    // handleUpdateInput = (e) => {
+    //     this.setState({
 
-            [e.target.name]: e.target.value
+    //         [e.target.name]: e.target.value
 
-        });
-    };
+    //     });
+    // };
 
 
     render() {
         return (
             <div ><center>
                 <AddProductForm signUpState={this.state} _inputHandler={this.inputHandler} _submit={this.submit} />
+
             </center>
             </div>
         );
@@ -215,7 +265,7 @@ class AddProductForm extends React.Component {
                         required
                         
                         name="productName"
-                        ref="productName"
+                        ref="selectedProduct"
                         onChange={this.props._inputHandler}
                         value={this.props.signUpState.productName}
                     >
@@ -306,7 +356,7 @@ class AddProductForm extends React.Component {
 
                     <RaisedButton type="submit" label="Add Product" primary={false} secondary={true} /> <br /><br />
                 </form>
-
+                
             </div>
         )
     }
