@@ -46,7 +46,7 @@ export default class Dashboard extends React.Component {
       <div >
         <AppBar title="Aheer Inventory" style={styles.appBar}
         iconClassNameRight="muidocs-icon-navigation-expand-more"
-         onTouchTap={this.handleToggle} >   
+         onTouchTap={this.handleToggle} docked={true} onLeftIconButtonTouchTap={this.handleToggle} >    </ AppBar>
          
           <Drawer 
         // width={200}
@@ -58,7 +58,7 @@ export default class Dashboard extends React.Component {
        // iconClassNameRight="muidocs-icon-navigation-expand-more"
         // onTouchTap={this.handleToggle}
           >  
-          </ AppBar>
+         
            
 <br />
 <img src='../naveedaheer1.jpg' alt="Naveed Aheer" width="260" ></img>
