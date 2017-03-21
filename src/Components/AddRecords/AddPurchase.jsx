@@ -33,7 +33,8 @@ class AddPurchaseOrder extends Component {
             unitPrice: 0,
             storeName: '',
             selectedProduct: '',
-            productNameInStock: ''
+            productNameInStock: '',
+            productQtyInStock:0
 
         }
         this.submit = this.submit.bind(this);
@@ -56,69 +57,60 @@ class AddPurchaseOrder extends Component {
          
         e.preventDefault();
         let multipath = {};
-        let productDetails = {
-            productName: this.state.productName,
-          //  storeName: this.state.storeName,
-          //    productName: this.refs.productName,
-            description: this.state.description,
-            qty: this.state.qty,
-            unitPrice: this.state.unitPrice
-        }
-
-        let Stock = {
-            productName: this.state.productName,
-            qty: this.state.qty
-        }
+  
 
 //Stock Start
       let _self = this;
         // e.preventDefault()
+        let found = false;
+        let Stock = {}
         let refStock = firebase.database().ref().child('/Stock');
-        _self.currentProduct = [];
+        _self.productQtyInStock = -1;
 
      //     console.log("this.state.selectedProduct", this.state.productName)
           refStock.orderByChild('productName').equalTo(this.state.productName).once('value', function (snapshot) {
       //  refStock.once('value', function (snapshot) {
 
-
-
             snapshot.forEach(childSnapshot => {
 
-                _self.currentProduct.push(childSnapshot.val())
-                console.log("Current Pro", _self.currentProduct)
-
+                     Stock = {
+                        productName: _self.state.productName,
+                        qty: parseInt(childSnapshot.val().qty) + parseInt(_self.state.qty)
+                    }
+                    console.log("Stock in DB", Stock)
+                    found = true
             })
-            _self.props.serachProducts(_self.currentProduct)
+            _self.props.serachProducts(_self.productQtyInStock)
             _self.setState({
-                currentProduct: _self.props.storeReducer.products,
+                productQtyInStock: _self.props.storeReducer.products,
              
             })
             
         });
-        console.log("this.state.currentProduct" ,this.state.currentProduct)
-     //              console.log("this.state.stockAvailable.productName", this.state.stockAvailable.productName)
 
-// Stock End
-        console.log("before push", productDetails)
-        //  DBfirebase.ref.child('/AddedPurchases').push(productDetails);
-                   console.log("this.state.currentProduct", this.state.currentProduct.productName)
-          
-          if(this.state.productName == this.state.currentProduct.productName){
-               //    DBfirebase.ref.child('/Stock/${currentProduct.id}').update();
-          }
-
-
-    else{
-                  DBfirebase.ref.child('/Stock').push(Stock);
+let productDetails = {
+            productName: this.state.productName,
+            description: this.state.description,
+            qty: this.state.qty,
+            unitPrice: this.state.unitPrice
         }
 
-  
- 
+    if (!found) {
+    Stock = {
+            productName: this.state.productName,
+            qty: this.state.qty
+            }
+            console.log("Stock If(found != true)", Stock)
+            DBfirebase.ref.child('/Stock').push(Stock);
+            DBfirebase.ref.child('/AddedPurchases').push(productDetails);
+        }
 
-          
-    //      browserHistory.push('/home/view-purchases')
-    
+DBfirebase.ref.child('/Stock').update(Stock);
+DBfirebase.ref.child('/AddedPurchases').push(productDetails);
 
+// Stock End
+     
+        //  browserHistory.push('/home/view-purchases')
     }
 
 
