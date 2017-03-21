@@ -95,17 +95,17 @@ let productDetails = {
             unitPrice: this.state.unitPrice
         }
 
-    if (!found) {
+    if(!found) {
     Stock = {
             productName: this.state.productName,
             qty: this.state.qty
             }
-            console.log("Stock If(found != true)", Stock)
+            console.log("Stock If(!found)", Stock)
             DBfirebase.ref.child('/Stock').push(Stock);
             DBfirebase.ref.child('/AddedPurchases').push(productDetails);
         }
 
-DBfirebase.ref.child('/Stock').update(Stock);
+DBfirebase.ref.child('/Stock/$id').update(qty);
 DBfirebase.ref.child('/AddedPurchases').push(productDetails);
 
 // Stock End
