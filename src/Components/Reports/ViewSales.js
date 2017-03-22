@@ -38,7 +38,7 @@ class ViewProducts extends Component {
      onSearch(e) {
         let _self = this;
        // e.preventDefault()
-        let ref = firebase.database().ref().child('/AddedPurchases/');
+        let ref = firebase.database().ref().child('/AddedSales/');
         _self.arr = [];
        
       //  console.log(this.refs.selectedCity.value)

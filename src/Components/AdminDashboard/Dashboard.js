@@ -43,6 +43,7 @@ export default class Dashboard extends React.Component {
 
   render() {
     return (
+      <div>
       <div >
         <AppBar title="Aheer Inventory" style={styles.appBar}
         iconClassNameRight="muidocs-icon-navigation-expand-more"
@@ -57,7 +58,7 @@ export default class Dashboard extends React.Component {
               showMenuIconButton={false}
        // iconClassNameRight="muidocs-icon-navigation-expand-more"
         // onTouchTap={this.handleToggle}
-          >  
+          >   </ AppBar>
          
            
 <br />
@@ -194,13 +195,15 @@ export default class Dashboard extends React.Component {
         /></Link><br /><br />*/}
 
 
-        </Drawer>
+        </ Drawer>
  
-            </ AppBar>
 
-{this.props.children}
 
       </div>
+    <div>
+{this.props.children}
+    </div>
+    </div>
     );
   }
 }

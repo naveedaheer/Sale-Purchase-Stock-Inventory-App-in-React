@@ -17,107 +17,51 @@ const style = {
     textAlign: 'center'
 };
 
-const pro='';
-
-class AddPurchaseOrder extends Component {
+class AddSaleOrder extends Component {
     constructor() {
         super();
         this.state = {
             products: [],
             stores: [],
-            currentProduct: [],
-            stockAvailable: [],
             productName: '',
             description: '',
             qty: 0,
             unitPrice: 0,
-            storeName: '',
-            selectedProduct: '',
-            productNameInStock: '',
-            productQtyInStock:0
+            storeName: ''
 
         }
         this.submit = this.submit.bind(this);
         this.inputHandler = this.inputHandler.bind(this);
         this.GetAllProducts = this.GetAllProducts.bind(this);
          this.GetAllStores = this.GetAllStores.bind(this);
-         this.GetAllStock = this.GetAllStock.bind(this);
         //  this.handleUpdateInput = this.handleUpdateInput.bind(this);
     }
     inputHandler(e) {
         this.setState({
             [e.target.name]: e.target.value
         })
-
-         
     }
-
-
     submit(e) {
-         
         e.preventDefault();
         let multipath = {};
-  
-
-//Stock Start
-      let _self = this;
-        // e.preventDefault()
-        let found = false;
-        let Stock = {}
-        let refStock = firebase.database().ref().child('/Stock');
-        _self.productQtyInStock = -1;
-
-     //     console.log("this.state.selectedProduct", this.state.productName)
-          refStock.orderByChild('productName').equalTo(this.state.productName).once('value', function (snapshot) {
-      //  refStock.once('value', function (snapshot) {
-
-            snapshot.forEach(childSnapshot => {
-
-                     Stock = {
-                        productName: _self.state.productName,
-                        qty: parseInt(childSnapshot.val().qty) + parseInt(_self.state.qty)
-                    }
-                    console.log("Stock in DB", Stock)
-                    found = true
-            })
-            _self.props.serachProducts(_self.productQtyInStock)
-            _self.setState({
-                productQtyInStock: _self.props.storeReducer.products,
-             
-            })
-            
-        });
-
-let productDetails = {
+        let productDetails = {
             productName: this.state.productName,
+            storeName: this.state.storeName,
+          //    productName: this.refs.productName,
             description: this.state.description,
             qty: this.state.qty,
             unitPrice: this.state.unitPrice
         }
-
-    if(!found) {
-    Stock = {
-            productName: this.state.productName,
-            qty: this.state.qty
-            }
-            console.log("Stock If(!found)", Stock)
-            DBfirebase.ref.child('/Stock').push(Stock);
-            DBfirebase.ref.child('/AddedPurchases').push(productDetails);
-        }
-
-DBfirebase.ref.child('/Stock/$id').update(qty);
-DBfirebase.ref.child('/AddedPurchases').push(productDetails);
-
-// Stock End
-     
-        //  browserHistory.push('/home/view-purchases')
+        console.log(productDetails)
+          DBfirebase.ref.child('/AddedSales').push(productDetails);
+          browserHistory.push('/home/view-sales')
+          
     }
-
 
     GetAllProducts(e) {
         let _self = this;
         // e.preventDefault()
-        let refProducts = firebase.database().ref().child('/AddedProducts/');
+        let refProducts = firebase.database().ref().child('/Stock/');
         _self.products = [];
 
         //  console.log(this.refs.selectedCity.value)
@@ -138,7 +82,6 @@ DBfirebase.ref.child('/AddedPurchases').push(productDetails);
 
             })
         });
-        console.log("this.state.products" ,this.state.products)
     }
 
         GetAllStores(e) {
@@ -167,64 +110,31 @@ DBfirebase.ref.child('/AddedPurchases').push(productDetails);
         });
     }
 
-            GetAllStock(e) {
-        let _self = this;
-        // e.preventDefault()
-        let refStock = firebase.database().ref().child('/Stock');
-        _self.currentProduct = [];
-
-     //     console.log("this.state.selectedProduct", this.state.productName)
-          refStock.orderByChild('productName').equalTo(this.state.productName).once('value', function (snapshot) {
-      //  refStock.once('value', function (snapshot) {
-
-
-
-            snapshot.forEach(childSnapshot => {
-
-                _self.currentProduct.push(childSnapshot.val())
-                console.log("Current Pro", _self.currentProduct)
-
-            })
-            _self.props.serachProducts(_self.currentProduct)
-            _self.setState({
-                currentProduct: _self.props.storeReducer.products,
-             
-            })
-            
-        });
-        console.log("this.state.currentProduct" ,this.state.currentProduct)
-     //              console.log("this.state.stockAvailable.productName", this.state.stockAvailable.productName)
-
-    }
-
     componentWillMount() {
         this.GetAllProducts();
         this.GetAllStores();
-        
-        
     }
 
-    // handleUpdateInput = (e) => {
-    //     this.setState({
+    handleUpdateInput = (e) => {
+        this.setState({
 
-    //         [e.target.name]: e.target.value
+            [e.target.name]: e.target.value
 
-    //     });
-    // };
+        });
+    };
 
 
     render() {
         return (
             <div ><center>
                 <AddProductForm signUpState={this.state} _inputHandler={this.inputHandler} _submit={this.submit} />
-
             </center>
             </div>
         );
     }
 }
 
-// AddPurchaseOrder.contextTypes = {
+// AddSaleOrder.contextTypes = {
 //     router: React.PropTypes.object.isRequired
 // }
 
@@ -249,15 +159,15 @@ class AddProductForm extends React.Component {
         return (
             <div >
 
-                <h1>Add Purchased Order</h1>
+                <h1>Add Sale Order</h1>
                 <form onSubmit={this.props._submit} >
 
 
                     <select style={style}
                         required
-                        
+                       // autoFocus
                         name="productName"
-                        ref="selectedProduct"
+                        ref="productName"
                         onChange={this.props._inputHandler}
                         value={this.props.signUpState.productName}
                     >
@@ -273,7 +183,7 @@ class AddProductForm extends React.Component {
                     <br />
                     <br />
                       <br />
-{/*
+
  <select style={style}
                         required
                         
@@ -292,7 +202,7 @@ class AddProductForm extends React.Component {
                             })}
                     </select>
                     <br />
-                    <br />*/}
+                    <br />
 
 
                     {/*<AutoComplete
@@ -348,7 +258,7 @@ class AddProductForm extends React.Component {
 
                     <RaisedButton type="submit" label="Add Product" primary={false} secondary={true} /> <br /><br />
                 </form>
-                
+
             </div>
         )
     }
@@ -375,4 +285,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddPurchaseOrder);
+export default connect(mapStateToProps, mapDispatchToProps)(AddSaleOrder);

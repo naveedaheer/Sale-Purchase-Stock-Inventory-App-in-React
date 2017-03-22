@@ -9,14 +9,13 @@ import AppBar from 'material-ui/AppBar';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 
-class AddProduct extends Component {
+class AddStore extends Component {
     constructor() {
         super();
         this.state = {
-            productName: '',
+            storeName: '',
             description: '',
-           company: '',
-           MRP: ''
+            storeAddress:''
            
         }
         this.submit = this.submit.bind(this);
@@ -30,33 +29,32 @@ class AddProduct extends Component {
     submit(e) {
         e.preventDefault();
         let multipath = {};
-        let productDetails = {
-            productName: this.state.productName,
+        let storeDetails = {
+            storeName: this.state.storeName,
             description: this.state.description,
-           company: this.state.company,
-           MRP: this.state.MRP
+            storeAddress: this.state.storeAddress,
         }
-        console.log(productDetails)
-        DBfirebase.refAddProduct.push(productDetails);
-        browserHistory.push('/home/view-products')
+        console.log(storeDetails)
+        DBfirebase.ref.child('/AddedStores').push(storeDetails);
+        browserHistory.push('/home/view-stores')
 
     }
     render() {
         return (
             <div ><center>
-                <AddProductForm signUpState={this.state} _inputHandler={this.inputHandler} _submit={this.submit} />
+                <AddStoreForm signUpState={this.state} _inputHandler={this.inputHandler} _submit={this.submit} />
             </center>
             </div>
         );
     }
 }
 
-AddProduct.contextTypes = {
+AddStore.contextTypes = {
     router: React.PropTypes.object.isRequired
 }
 
 
-class AddProductForm extends React.Component {
+class AddStoreForm extends React.Component {
 
 
     render() {
@@ -67,10 +65,10 @@ class AddProductForm extends React.Component {
                 <h1>Add New Product</h1>
                 <form onSubmit={this.props._submit} >
                     <TextField
-                        hintText="Product Name"
-                        name="productName"
-                        value={this.props.signUpState.productName}
-                     floatingLabelText="Product Name"
+                        hintText="Store Name"
+                        name="storeName"
+                        value={this.props.signUpState.storeName}
+                        floatingLabelText="Store Name"
                         onChange={this.props._inputHandler}
                         /><br /><br />
 
@@ -79,32 +77,22 @@ class AddProductForm extends React.Component {
                         hintText="description"
                         name="description"
                         value={this.props.signUpState.description}
-                       floatingLabelText="description"
+                        floatingLabelText="description"
                         onChange={this.props._inputHandler}
                         /><br /><br />
 
                     
                         <TextField
                         type="text"
-                        hintText="company"
-                        name="company"
-                        value={this.props.signUpState.company}
-                        floatingLabelText="company"
+                        hintText="Store Address"
+                        name="storeAddress"
+                        value={this.props.signUpState.storeAddress}
+                        floatingLabelText="Store Address"
                         onChange={this.props._inputHandler}
                         /><br />
                         <br />
 
-                        <TextField
-                        type="number"
-                        hintText="MRP"
-                        name="MRP"
-                        value={this.props.signUpState.MRP}
-                        floatingLabelText="Max Retail Price"
-                        onChange={this.props._inputHandler}
-                        /><br />
-                        <br />
-
-                 <RaisedButton type="submit" label="Add Product" primary={false} secondary={true} /> <br /><br />
+                 <RaisedButton type="submit" label="Add Store" primary={true} secondary={false} /> <br /><br />
                 </form>
                 
             </div>
@@ -112,10 +100,10 @@ class AddProductForm extends React.Component {
     }
 }
 
-AddProductForm.PropTypes = {
+AddStoreForm.PropTypes = {
     _inputHandler: React.PropTypes.func.isRequired,
     _submit: React.PropTypes.func.isRequired
 
 }
 
-export default AddProduct;
+export default AddStore;
