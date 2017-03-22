@@ -113,14 +113,14 @@ export default class Dashboard extends React.Component {
           label="View "
           primary={true}
         /></Link><br /><br />
-
+ <Link to='/home/view-stock' >
  <RaisedButton
         fullWidth
           style={styles.button}
           onTouchTap={this.handleTouchTap}
           label="stock"
           secondary={true}
-        /><br /><br />
+        /></Link> <br /><br />
        <Link to='/home/view-products' ><RaisedButton
         fullWidth
           style={styles.button}
