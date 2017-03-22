@@ -78,7 +78,7 @@ class AddPurchaseOrder extends Component {
                 };
                 
                 refStock.child(childSnapshot.key).set(Stock);
-                console.log("Stock in DB", Stock)   
+              console.log("Qty in DB", childSnapshot.val().qty)    
             })
             _self.props.serachProducts(_self.productQtyInStock)
             _self.setState({
