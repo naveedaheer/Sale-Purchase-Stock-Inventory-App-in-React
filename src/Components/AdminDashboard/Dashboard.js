@@ -127,7 +127,7 @@ export default class Dashboard extends React.Component {
           onTouchTap={this.handleTouchTap}
           label="products"
           secondary={true}
-        /></Link> 
+        /></Link>
 
        <Link to='/home/add-product' ><RaisedButton
         width={150}
