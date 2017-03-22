@@ -101,7 +101,7 @@ let productDetails = {
 
 // Stock End
      
-        //  browserHistory.push('/home/view-purchases')
+          browserHistory.push('/home/view-purchases')
     }
 
 
