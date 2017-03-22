@@ -35,8 +35,7 @@ class AddProduct extends Component {
             productName: this.state.productName,
             description: this.state.description,
             company: this.state.company,
-            MRP: this.state.MRP,
-            qty: this.state.qty
+            MRP: this.state.MRP
         }
 
         let stock = {

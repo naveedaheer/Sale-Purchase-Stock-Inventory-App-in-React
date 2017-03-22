@@ -43,7 +43,24 @@ class AddSaleOrder extends Component {
     }
     submit(e) {
         e.preventDefault();
+        let _self = this
         let multipath = {};
+        let refStock = firebase.database().ref().child('/Stock');
+                 refStock.orderByChild('productName').equalTo(this.state.productName).once('value', function (snapshot) {
+      //  refStock.once('value', function (snapshot) {
+
+            snapshot.forEach(childSnapshot => {
+
+               let Stock = {
+                    productName: _self.state.productName,
+                    qty: parseInt(childSnapshot.val().qty) - parseInt(_self.state.qty)
+                };
+                
+                refStock.child(childSnapshot.key).set(Stock);
+                console.log("Qty in DB", childSnapshot.val().qty)   
+            })
+            
+        });
         let productDetails = {
             productName: this.state.productName,
             storeName: this.state.storeName,
