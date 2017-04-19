@@ -1,109 +1,91 @@
 import React, { Component } from 'react'
-import { signIn } from '../../Store/Actions/Auth'
+import { Link } from 'react-router';
 import { connect } from 'react-redux'
-import { DBfirebase } from '../../Database/DBfirebase'
-
-import { Link } from "react-router"
-import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
+import TextField from 'material-ui/TextField';
 import AppBar from 'material-ui/AppBar';
+import { firebaseApp } from '../../Database/firebaseApp'
+import {AuthActions} from '../../Store/Actions/AllActions'
+import { LoginUser } from '../../Store/Actions/MiddleWare'
 
-
-class Login extends Component {
-    constructor() {
-        super();
-        this.state = {
-            email: '',
-            password: ''
-        }
-        this.signin = this.signin.bind(this);
-        this.inputHandler = this.inputHandler.bind(this);
-    }
-    inputHandler(e) {
-        this.setState({
-            [e.target.name]: e.target.value
-        })
-    }
-    signin(e) {
-        e.preventDefault()
-        DBfirebase.customLogin(this.state)
-            .then((user) => {
-                this.props.signInUser(user)
-                localStorage.setItem('currentUser', user.uid);
-                this.context.router.push({
-                    pathname: '/home',
-                    // state: this.props.user
-                })
-            })
-            .catch((error) => alert(error.message))
-        console.log(this.props)
-    }
-    render() {
-        return (
-            <div >
-                <SigninComponent _inputHandler={this.inputHandler} _submit={this.signin} />
-            </div>
-        )
-    }
-}
-
-Login.contextTypes = {
-    router: React.PropTypes.object.isRequired
-}
-
-const mapStateToProps = (state) => { 
+const mapStateToProps = (state) => {
     return {
         authReducer: state
     }
 }
+
 const mapDispatchToProps = (dispatch) => {
     return {
-        signInUser: (data) => {
-            dispatch(signIn(data))
+        signIn: (data) => {
+            dispatch(LoginUser(data))
         }
     }
 }
 
+class SignInComponent extends React.Component {
 
+    constructor() {
+        super();
+        this.state = {
+            email: '',
+            password: '',
+            error: {
+                message: ''
+            }
+        }
+        this.submit = this.submit.bind(this);
+        this.inputChange = this.inputChange.bind(this);
+    }
 
-class SigninComponent extends React.Component {
+    inputChange(e) {
+        this.setState({
+            [e.target.name]: e.target.value
+        })
+    }
 
+    submit(e) {
+        e.preventDefault();
+        let user = {
+            email: this.state.email,
+            password: this.state.password
+        }
+
+        { this.props.signIn(user) }
+
+    }
 
     render() {
+
         return (
             <div >
                 <center>
-               <h1>Admin Login</h1>
-                <form onSubmit={this.props._submit}>
-                    <TextField
-                        type="email"
-                        hintText="Email"
-                         name="email"
-                         floatingLabelText="Email"
-                        onChange={this.props._inputHandler}
-                        required
+                    <h1>SignIn</h1>
+                    <form onSubmit={this.submit} >
+                        <TextField
+                            type="email"
+                            hintText="email"
+                            name="email"
+                            value={this.state.email}
+                            floatingLabelText="Email"
+                            onChange={this.inputChange}
                         /><br />
 
-                    <TextField
-                        type="password"
-                        hintText="password"
-                        name="password"           
-                        floatingLabelText="Password"
-                        onChange={this.props._inputHandler}
-                        required
+                        <TextField
+                            type="password"
+                            hintText="Password"
+                            name="password"
+                            value={this.state.password}
+                            floatingLabelText="Password"
+                            onChange={this.inputChange}
                         /><br /><br />
-                    <RaisedButton type="submit" label="Sign in" primary={true} /><br />                
-                </form>
+                        <RaisedButton type="submit" label="SignIn" primary={true} /> <br /><br />
+                    </form>
                 </center>
             </div>
         )
     }
 }
-SigninComponent.PropTypes = {
-    _inputHandler: React.PropTypes.func.isRequired,
-    _submit: React.PropTypes.func.isRequired
-
-}
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignInComponent);

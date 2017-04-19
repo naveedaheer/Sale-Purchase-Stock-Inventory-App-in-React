@@ -2,12 +2,11 @@ import React, { Component } from 'react'
 import { Link, browserHistory } from 'react-router';
 import { connect } from 'react-redux'
 import RaisedButton from 'material-ui/RaisedButton';
-import { DBfirebase } from '../../Database/DBfirebase'
-import { signUp } from '../../Store/Actions/Auth'
 import TextField from 'material-ui/TextField';
 import AppBar from 'material-ui/AppBar';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
+import {AddNewStore} from '../../Store/Actions/MiddleWare'
 
 class AddStore extends Component {
     constructor() {
@@ -21,89 +20,77 @@ class AddStore extends Component {
         this.submit = this.submit.bind(this);
         this.inputHandler = this.inputHandler.bind(this);
     }
+
     inputHandler(e) {
         this.setState({
             [e.target.name]: e.target.value
         })
     }
+
     submit(e) {
         e.preventDefault();
-        let multipath = {};
         let storeDetails = {
             storeName: this.state.storeName,
             description: this.state.description,
             storeAddress: this.state.storeAddress,
         }
         console.log(storeDetails)
-        DBfirebase.ref.child('/AddedStores').push(storeDetails);
-        browserHistory.push('/home/view-stores')
-
+        {this.props.AddStoreRequest(storeDetails)}
     }
+
     render() {
         return (
             <div ><center>
-                <AddStoreForm signUpState={this.state} _inputHandler={this.inputHandler} _submit={this.submit} />
+               <h1>Add New Product</h1>
+                <form onSubmit={this.submit} >
+                    <TextField
+                        hintText="Store Name"
+                        name="storeName"
+                        value={this.state.storeName}
+                        floatingLabelText="Store Name"
+                        onChange={this.inputHandler}
+                        /><br /><br />
+                    
+                        <TextField
+                        type="text"
+                        hintText="Store Address"
+                        name="storeAddress"
+                        value={this.state.storeAddress}
+                        floatingLabelText="Store Address"
+                        onChange={this.inputHandler}
+                        /><br />
+                        <br />
+
+
+                    <TextField
+                        type="text"
+                        hintText="description"
+                        name="description"
+                        value={this.state.description}
+                        floatingLabelText="description"
+                        onChange={this.inputHandler}
+                        /><br /><br />
+
+                 <RaisedButton type="submit" label="Add Store" primary={true} secondary={false} /> <br /><br />
+                </form>
             </center>
             </div>
         );
     }
 }
 
-AddStore.contextTypes = {
-    router: React.PropTypes.object.isRequired
-}
-
-
-class AddStoreForm extends React.Component {
-
-
-    render() {
-        
-        return (
-            <div >
-              
-                <h1>Add New Product</h1>
-                <form onSubmit={this.props._submit} >
-                    <TextField
-                        hintText="Store Name"
-                        name="storeName"
-                        value={this.props.signUpState.storeName}
-                        floatingLabelText="Store Name"
-                        onChange={this.props._inputHandler}
-                        /><br /><br />
-
-                    <TextField
-                        type="text"
-                        hintText="description"
-                        name="description"
-                        value={this.props.signUpState.description}
-                        floatingLabelText="description"
-                        onChange={this.props._inputHandler}
-                        /><br /><br />
-
-                    
-                        <TextField
-                        type="text"
-                        hintText="Store Address"
-                        name="storeAddress"
-                        value={this.props.signUpState.storeAddress}
-                        floatingLabelText="Store Address"
-                        onChange={this.props._inputHandler}
-                        /><br />
-                        <br />
-
-                 <RaisedButton type="submit" label="Add Store" primary={true} secondary={false} /> <br /><br />
-                </form>
-                
-            </div>
-        )
+const mapStateToProps = (state) => {
+    return{
+        storeReducer: state.storeReducer
     }
 }
 
-AddStoreForm.PropTypes = {
-    _inputHandler: React.PropTypes.func.isRequired,
-    _submit: React.PropTypes.func.isRequired
-
+const mapDispatchToProps = (dispatch) => {
+    return{
+        AddStoreRequest: (data) => {
+            dispatch(AddNewStore(data))
+        }
+    }
 }
 
-export default AddStore;
+export default connect(mapStateToProps,mapDispatchToProps)(AddStore);

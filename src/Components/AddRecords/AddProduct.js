@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import { Link, browserHistory } from 'react-router';
 import { connect } from 'react-redux'
 import RaisedButton from 'material-ui/RaisedButton';
-import { DBfirebase } from '../../Database/DBfirebase'
-import { signUp } from '../../Store/Actions/Auth'
+import {firebaseApp} from '../../Database/firebaseApp'
+import { AddNewProduct } from '../../Store/Actions/MiddleWare'
 import TextField from 'material-ui/TextField';
 import AppBar from 'material-ui/AppBar';
 import SelectField from 'material-ui/SelectField';
@@ -16,7 +16,6 @@ class AddProduct extends Component {
             productName: '',
             description: '',
             company: '',
-            MRP: '',
             qty:0
            
         }
@@ -35,59 +34,37 @@ class AddProduct extends Component {
             productName: this.state.productName,
             description: this.state.description,
             company: this.state.company,
-            MRP: this.state.MRP
+            qty:0
         }
 
         let stock = {
             productName: this.state.productName,
             qty: this.state.qty
         }
+        {this.props.AddProductRequest(productDetails)}
         console.log("productDetails", productDetails)
-        console.log("stock", stock)
-        DBfirebase.ref.child('/AddedProducts').push(productDetails);
-        DBfirebase.ref.child('Stock').push(stock);
-        browserHistory.push('/home/view-products')
     }
+
     render() {
         return (
             <div ><center>
-                <AddProductForm signUpState={this.state} _inputHandler={this.inputHandler} _submit={this.submit} />
-            </center>
-            </div>
-        );
-    }
-}
-
-AddProduct.contextTypes = {
-    router: React.PropTypes.object.isRequired
-}
-
-
-class AddProductForm extends React.Component {
-
-
-    render() {
-        
-        return (
-            <div >
-              
-                <h1>Add New Product</h1>
-                <form onSubmit={this.props._submit} >
+                            <h1>Add New Product</h1>
+                <form onSubmit={this.submit} >
                     <TextField
                         hintText="Product Name"
                         name="productName"
-                        value={this.props.signUpState.productName}
+                        value={this.state.productName}
                      floatingLabelText="Product Name"
-                        onChange={this.props._inputHandler}
+                        onChange={this.inputHandler}
                         /><br /><br />
 
                     <TextField
                         type="text"
                         hintText="description"
                         name="description"
-                        value={this.props.signUpState.description}
+                        value={this.state.description}
                        floatingLabelText="description"
-                        onChange={this.props._inputHandler}
+                        onChange={this.inputHandler}
                         /><br /><br />
 
                     
@@ -95,34 +72,33 @@ class AddProductForm extends React.Component {
                         type="text"
                         hintText="company"
                         name="company"
-                        value={this.props.signUpState.company}
+                        value={this.state.company}
                         floatingLabelText="company"
-                        onChange={this.props._inputHandler}
-                        /><br />
-                        <br />
-
-                        <TextField
-                        type="number"
-                        hintText="MRP"
-                        name="MRP"
-                        value={this.props.signUpState.MRP}
-                        floatingLabelText="Max Retail Price"
-                        onChange={this.props._inputHandler}
+                        onChange={this.inputHandler}
                         /><br />
                         <br />
 
                  <RaisedButton type="submit" label="Add Product" primary={false} secondary={true} /> <br /><br />
                 </form>
                 
+                            </center>
             </div>
-        )
+        );
     }
 }
 
-AddProductForm.PropTypes = {
-    _inputHandler: React.PropTypes.func.isRequired,
-    _submit: React.PropTypes.func.isRequired
-
+const mapStateToProps=(state)=>{
+    return{
+        productReducer: state.productReducer
+    }
 }
 
-export default AddProduct;
+const mapDispatchToProps = (dispatch) => {
+    return {
+        AddProductRequest: (data) => {
+            dispatch(AddNewProduct(data))
+        }
+    }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(AddProduct);

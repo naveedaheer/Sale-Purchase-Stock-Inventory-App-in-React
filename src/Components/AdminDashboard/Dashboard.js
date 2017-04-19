@@ -7,6 +7,8 @@ import RaisedButton from 'material-ui/RaisedButton';
 import MUI from 'material-ui'
 import AppBar from 'material-ui/AppBar';
 import {Link} from 'react-router'
+import {LogOut} from '../../Store/Actions/MiddleWare'
+import {connect} from 'react-redux'
 
 
  const styles ={ 
@@ -14,7 +16,6 @@ import {Link} from 'react-router'
    // backgroundColor: '#009688',
     backgroundColor: '#3F51B5',
      minHeight:50,
-     // height:300
   },
 
   drawer: {
@@ -28,16 +29,19 @@ import {Link} from 'react-router'
   }
  }
 
-export default class Dashboard extends React.Component {
+class Dashboard extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
     openDrawer: false,
-   
   };
+this.logOut = this.logOut.bind(this);
+}
 
-  }
+logOut(){
+  this.props.LogOutRequest()
+}
 
   handleToggle = () => this.setState({openDrawer: !this.state.openDrawer});
 
@@ -47,7 +51,8 @@ export default class Dashboard extends React.Component {
       <div >
         <AppBar title="Aheer Inventory" style={styles.appBar}
         iconClassNameRight="muidocs-icon-navigation-expand-more"
-         onTouchTap={this.handleToggle} onLeftIconButtonTouchTap={this.handleToggle} >    </ AppBar>
+         onTouchTap={this.handleToggle} onLeftIconButtonTouchTap={this.handleToggle} >   
+         </ AppBar>
          
           <Drawer 
         // width={200}
@@ -58,8 +63,10 @@ export default class Dashboard extends React.Component {
               showMenuIconButton={false}
        // iconClassNameRight="muidocs-icon-navigation-expand-more"
         // onTouchTap={this.handleToggle}
-          >   </ AppBar>
-         
+          >   
+          
+        </ AppBar>
+ 
            
 <br />
 <img src='../naveedaheer1.jpg' alt="Naveed Aheer" width="260" ></img>
@@ -138,8 +145,7 @@ export default class Dashboard extends React.Component {
         /></Link> 
         {"  "}
         <Link to='/home/view-products' >
-        <RaisedButton
-        
+        <RaisedButton      
           style={styles.button}
           onTouchTap={this.handleTouchTap}
           label="View "
@@ -162,43 +168,21 @@ export default class Dashboard extends React.Component {
         /></Link> 
         {"  "}
         <Link to='/home/view-stores' >
-        <RaisedButton
-        
+        <RaisedButton    
           style={styles.button}
           onTouchTap={this.handleTouchTap}
           label="View "
           primary={true}
         /></Link><br /><br />
-{/*
-        <RaisedButton
-        fullWidth
-          style={styles.button}
-          onTouchTap={this.handleTouchTap}
-          label="Users"
-          secondary={true}
-        />
-        <Link to='/home/add-users' ><RaisedButton
-        width={150}
-          style={styles.button}
-          onTouchTap={this.handleTouchTap}
-          label="Add "
-          primary={true}
-        /></Link> 
-        {"  "}
-        <Link to='/home/view-users' >
-        <RaisedButton
-        
-          style={styles.button}
-          onTouchTap={this.handleTouchTap}
-          label="View "
-          primary={true}
-        /></Link><br /><br />*/}
-
-
         </ Drawer>
- 
-
-
+        <RaisedButton
+          //style={styles.button}
+          onClick={this.logOut}
+          //onTouchTap={this.props.LogOutRequest()}
+          label="Logout"
+          primary={false}
+         // secondary={true}
+        /> 
       </div>
     <div>
 {this.props.children}
@@ -207,3 +191,19 @@ export default class Dashboard extends React.Component {
     );
   }
 }
+
+const mapStateToProps = (state) => {
+    return{
+        //storeReducer: state.storeReducer
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return{
+        LogOutRequest: () => {
+            dispatch(LogOut())
+        }
+    }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(Dashboard);
