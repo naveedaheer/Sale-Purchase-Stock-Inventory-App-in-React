@@ -111,12 +111,10 @@ export function AddNewPurchase(AddNewPurchaseData) {
                     console.log("stock.qty", stock.qty)
                     firebaseApp.database().ref('/products/'+AddNewPurchaseData.productId).update(stock)
                 .then((data)=>{
-                    alert("Stock Updated")
+                   // alert("Stock Updated")
                 })
-                })
-                
-                browserHistory.replace('/home/view-purchases');
-
+                })  
+                    browserHistory.replace('/home/view-purchases');
             })
             .catch((error) => {
                 console.log("Error in adding Purchase", error)
@@ -173,7 +171,7 @@ export function AddNewSale(AddNewSaleData) {
                     console.log("stock.qty", stock.qty)
                     firebaseApp.database().ref('/products/'+AddNewSaleData.productId).update(stock)
                 .then((data)=>{
-                    alert("Stock Updated")
+                   // alert("Stock Updated")
                 })
                 browserHistory.replace('/home/view-sales');
                     }
