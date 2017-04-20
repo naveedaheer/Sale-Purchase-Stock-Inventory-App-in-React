@@ -1,7 +1,8 @@
 import * as firebase from 'firebase';
 import React, { Component } from 'react';
 import Paper from 'material-ui/Paper';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
+import Snackbar from 'material-ui/Snackbar';
 import {ViewPurchases} from '../../Store/Actions/MiddleWare'
 
 const style = {
@@ -16,9 +17,23 @@ const style = {
 class ViewProducts extends Component {
     constructor(props){
         super();
-        console.log("this.props", this.props)
+        this.state = {
+            open: false,
+        }
         props.loadPurchases();
     }
+
+    handleRequestClose = () => {
+    this.setState({
+      open: false,
+    });
+  };
+
+  componentWillReceiveProps(){
+    this.setState({
+            open: this.props.snackbarStatus
+        })
+}
     
     render() {
         return (
@@ -40,6 +55,12 @@ class ViewProducts extends Component {
   )
                 })  
                 }
+                <Snackbar
+          open={this.state.open}
+          message="Stock Added Successfully!"
+          autoHideDuration={4000}
+          onRequestClose={this.handleRequestClose}
+        />
             </div>
         );
     }
@@ -48,7 +69,8 @@ class ViewProducts extends Component {
 const mapStateToProps = (state) => { 
      console.log("state", state)
     return {
-        purchases: state.purchaseReducer.purchases
+        purchases: state.purchaseReducer.purchases,
+        snackbarStatus: state.purchaseReducer.open
     }
 }
 
