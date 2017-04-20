@@ -105,7 +105,8 @@ export var purchaseReducer = (state = {
     errorMessage: {},
     hasLoggedIn: false,
     hasRegistered: false,
-    purchases: []
+    purchases: [],
+    open:false,
 }, action) => {
 
     switch (action.type) {
@@ -114,7 +115,7 @@ export var purchaseReducer = (state = {
             return Object.assign({}, state)
 
         case Constants.ADD_PURCHASE_SUCCESS:
-            return Object.assign({}, state, { addedPurchases: action.addPurchaseData })
+            return Object.assign({}, state, { addedPurchases: action.addPurchaseData, open:true })
 
         case Constants.ADD_PURCHASE_FAILED:
             return Object.assign({}, state, { hasError: true, errorMessage: action.error })
@@ -138,7 +139,8 @@ export var saleReducer = (state = {
     errorMessage: {},
     hasLoggedIn: false,
     hasRegistered: false,
-    sales: []
+    sales: [],
+    open:false,
 }, action) => {
     switch (action.type) {
             
@@ -146,7 +148,7 @@ export var saleReducer = (state = {
             return Object.assign({}, state)
 
         case Constants.ADD_SALE_SUCCESS:
-            return Object.assign({}, state, { addedSales: action.addSaleData })
+            return Object.assign({}, state, { addedSales: action.addSaleData, open: true })
 
         case Constants.ADD_SALE_FAILED:
             return Object.assign({}, state, { hasError: true, errorMessage: action.error })
