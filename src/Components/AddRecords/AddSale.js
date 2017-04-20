@@ -4,10 +4,7 @@ import { connect } from 'react-redux'
 import {bindActionCreators} from 'redux'
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
-import AppBar from 'material-ui/AppBar';
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
-import AutoComplete from 'material-ui/AutoComplete';
+import DatePicker from 'material-ui/DatePicker';
 import {AddNewSale, ViewProducts, ViewStores} from '../../Store/Actions/MiddleWare'
 
 const style = {
@@ -25,17 +22,13 @@ class AddSaleOrder extends Component {
             qty: 0,
             unitPrice: 0,
             storeName: '',
-            storeId: ''
+            storeId: '',
+            saleDate: ''
         }
-       // props.ViewProducts();
-       // props.ViewStores();
+        props.ViewProducts();
+        props.ViewStores();
         this.submit = this.submit.bind(this);
         this.inputHandler = this.inputHandler.bind(this);
-    }
-
-    componentWillRecieveProps(){
-        this.props.ViewProducts();
-       this.props.ViewStores();
     }
     
     inputHandler(e) {
@@ -53,11 +46,18 @@ class AddSaleOrder extends Component {
             storeId: this.state.storeId,
             description: this.state.description,
             qty: this.state.qty,
-            unitPrice: this.state.unitPrice
+            unitPrice: this.state.unitPrice,
+            saleDate: this.state.saleDate
         }
         console.log(productDetails)
         this.props.addSaleRequest(productDetails);     
     }
+
+      handleDateChange = (event, date) =>{
+      this.setState({
+          saleDate: date
+      })
+  }
 
     render() {
         return (
@@ -126,7 +126,15 @@ class AddSaleOrder extends Component {
                         onChange={this.inputHandler}
                     /><br />
                     <br />
-
+                    <DatePicker
+                        hintText="Purchase Date"
+                        mode="landscape"
+                        name="purchaseDate"
+                        value={this.state.saleDate}
+                        onChange={this.handleDateChange}
+                        maxDate={new Date()}
+                    />
+                    <br /><br />
                       <TextField
                         type="text"
                         hintText="description"
