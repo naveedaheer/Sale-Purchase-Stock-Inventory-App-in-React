@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Paper from 'material-ui/Paper';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
+import Snackbar from 'material-ui/Snackbar';
 import {ViewSales} from '../../Store/Actions/MiddleWare'
 
 const style = {
@@ -15,8 +16,23 @@ const style = {
 class ViewProducts extends Component {
     constructor(props){
         super();
+        this.state = {
+            open: false,
+        }
         props.loadSales();
     }
+
+        handleRequestClose = () => {
+    this.setState({
+      open: false
+    });
+  };
+
+  componentWillReceiveProps(){
+    this.setState({
+            open: this.props.snackbarStatus
+        })
+}
 
     render() {
         return (
@@ -39,6 +55,12 @@ class ViewProducts extends Component {
   )
                 })        
                 }
+                <Snackbar
+          open={this.state.open}
+          message="Stock Subtracted Successfully!"
+          autoHideDuration={4000}
+          onRequestClose={this.handleRequestClose}
+        />
             </div>
         );
     }
@@ -47,7 +69,8 @@ class ViewProducts extends Component {
 const mapStateToProps = (state) => { 
      console.log(state.saleReducer.sales)
     return {
-        allSales: state.saleReducer.sales
+        allSales: state.saleReducer.sales,
+        snackbarStatus: state.saleReducer.open
     }
 }
 
